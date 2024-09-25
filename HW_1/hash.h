@@ -24,6 +24,11 @@ class hashTable {
     //True if deletion is successful, False if key is not there
     bool remove(const std::string &key);
     private:
+        //Supports up to 2^32, integer maximum in cpp
+        static int OFFSET;
+        static int FNV_PRIME;
+        int num_elements;
+
         //every object in a hash table. key is the string used as a key
         //isOccupied tells you that this entry is empty
         //isDeleted tells you this element is free to be replaced, 
@@ -36,18 +41,24 @@ class hashTable {
                 bool isDeleted {false};
                 void *pv {nullptr};
         };
+        std::vector<hashItem> v;
 
         //Hash generator for a given key
         int hash(const std::string &key);
+
+        
         //Searches for an item with a given key
         //Return position if found, otherwise -1
         int findPos(const std::string &key);
 
         //True on success, False if memory allocation fails
         bool rehash();
+
+
         //Return a prime number with lower bound size
         //Can use a precomputed list of selected prime numbers.
         static unsigned int getPrime(int size);
+
 };
 
 #endif _HASH_H
