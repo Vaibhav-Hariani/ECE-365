@@ -1,32 +1,32 @@
-#ifndef _HASH_H
-#define _HASH_H
+#ifndef HASH_H_
+#define HASH_H_
 #include <string>
 #include <vector>
 
 class hashTable {
     public:
-    //Hash Table constructor 
-    hashTable(int size = 0);
+        //Hash Table constructor 
+        hashTable(int size = 0);
 
-    //if pointer is provided, associate pointer with key
-    //0 if success, 1 if key already exists, 2 if rehash fails.
-    int insert(const std::string &key, void *pv = nullptr);
+        //if pointer is provided, associate pointer with key
+        //0 if success, 1 if key already exists, 2 if rehash fails.
+        int insert(const std::string &key, void *pv = nullptr);
 
-    //true if key in hash
-    //false otherwise
-    bool contains(const std::string &key);
+        //true if key in hash
+        //false otherwise
+        bool contains(const std::string &key);
 
-    //return nullptr if no key
-    //if pointer to bool is provided, set bool to true if pointer is provided
-    //set bool to false otherwise
-    void *getPointer(const std::string &key, bool *b = nullptr);
+        //return nullptr if no key
+        //if pointer to bool is provided, set bool to true if pointer is provided
+        //set bool to false otherwise
+        void *getPointer(const std::string &key, bool *b = nullptr);
 
-    //True if deletion is successful, False if key is not there
-    bool remove(const std::string &key);
+        //True if deletion is successful, False if key is not there
+        bool remove(const std::string &key);
     private:
         //Supports up to 2^32, integer maximum in cpp
-        static int OFFSET;
-        static int FNV_PRIME;
+        static const int OFFSET = 2166136261;
+        static const int FNV_PRIME = 16777619;
         int num_elements;
 
         //every object in a hash table. key is the string used as a key
@@ -41,7 +41,7 @@ class hashTable {
                 bool isDeleted {false};
                 void *pv {nullptr};
         };
-        std::vector<hashItem> v;
+        std::vector<hashItem *> v;
 
         //Hash generator for a given key
         int hash(const std::string &key);
@@ -61,4 +61,4 @@ class hashTable {
 
 };
 
-#endif _HASH_H
+#endif //HASH_H_
