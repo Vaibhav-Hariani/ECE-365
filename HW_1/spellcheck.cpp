@@ -24,7 +24,7 @@ hashTable* parse_dictionary(string filename) {
     string line;
     // Error handling for a failed read
     if (!inFile.is_open()) {
-        throw invalid_argument("file for dictionary failed to open");
+        throw invalid_argument("\n File for dictionary failed to open: \n Check permissions and existence?");
     }
     // This might be cheating but I don't believe anything was specified against it
     // Getting an upper bound for size
@@ -57,7 +57,7 @@ void spellcheck(string in_file, string out_file, hashTable& table) {
     string read_line;
 
     if (!inFile.is_open() || !outFile.is_open()) {
-        throw invalid_argument("files for read/write failed to open");
+        throw invalid_argument("Files for Read/Write failed to open");
     }
     const regex regex_val = regex("[A-Za-z'-]");
     int line_number = 0;
@@ -66,49 +66,47 @@ void spellcheck(string in_file, string out_file, hashTable& table) {
         int i = 0;
         string word = "";
         bool shouldCheck = true;
-        bool tooLong = false;
         for (int i = 0; i < read_line.size(); i++) {
             string a = string(1, tolower(read_line[i]));
             if (regex_match(a, regex_val) > 0 || isdigit(read_line[i]) > 0) {
-                if (isdigit(i)) {
+                if (isdigit(read_line[i])) {
                     shouldCheck == false;
-                } else if (word.size() < 20) {
+                } else if (word.size() < 21) {
                     word += a;
-                } else {
-                    tooLong == true;
                 }
             } else {
-                if (shouldCheck && tooLong) {
+                if (shouldCheck && word.size() > 20) {
+                    word.pop_back();
                     outFile << "Long word at line " << to_string(line_number) << ", starts: " << word << "\n";
-                } else if (shouldCheck && !(table.contains(word))) {
+                } else if (shouldCheck && word.size() > 0 && !(table.contains(word))) {
                     outFile << "Unknown word at line " << to_string(line_number) << ": " << word << "\n";
                 }
-                    // Word is complete
-                    shouldCheck = true;
-                    word = "";
-                    tooLong = false;
-                }
-            }
-            //Handling words that might've been missed at the end of the string
-            if (shouldCheck && tooLong) {
-                outFile << "Long word at line " << to_string(line_number) << ", starts: " << word << "\n";
-            } else if (shouldCheck && word.size() > 0 and !(table.contains(word))) {
-                outFile << "Unknown word at line " << to_string(line_number) << ": " << word << "\n";
+                // Word is complete
+                shouldCheck = true;
+                word = "";
             }
         }
-
+        // Handling words that might've been missed at the end of the string
+        if (shouldCheck && word.size() > 20) {
+            word.pop_back();
+            outFile << "Long word at line " << to_string(line_number) << ", starts: " << word << "\n";
+        } else if (shouldCheck && word.size() > 0 and !(table.contains(word))) {
+            outFile << "Unknown word at line " << to_string(line_number) << ": " << word << "\n";
+        }
     }
+}
 
 int main() {
+    // these are initial values I used for testing: They are overwritten anyhow
     string dict_name = "wordlist_small.txt";
     cout << "Enter dictionary file: ";
-    // cin >> dict_name;
+    cin >> dict_name;
     string spellcheck_name = "lyrics.txt";
-    // cout << "\nEnter name of file to spellcheck: ";
-    // cin >> spellcheck_name;
+    cout << "\nEnter name of file to spellcheck: ";
+    cin >> spellcheck_name;
     string output = "output.txt";
-    // cout << "\nEnter output file: ";
-    // cin >> output;
+    cout << "\nEnter output file: ";
+    cin >> output;
     cout << "Parsing Dictionary.\n";
     clock_t t1 = clock();
     hashTable* table = parse_dictionary(dict_name);
