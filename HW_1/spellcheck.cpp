@@ -99,14 +99,14 @@ void spellcheck(string in_file, string out_file, hashTable& table) {
 int main() {
     // these are initial values I used for testing: They are overwritten anyhow
     string dict_name = "wordlist_small.txt";
-    cout << "Enter dictionary file: ";
-    cin >> dict_name;
+    // cout << "Enter dictionary file: ";
+    // cin >> dict_name;
     string spellcheck_name = "lyrics.txt";
-    cout << "\nEnter name of file to spellcheck: ";
-    cin >> spellcheck_name;
+    // cout << "\nEnter name of file to spellcheck: ";
+    // cin >> spellcheck_name;
     string output = "output.txt";
-    cout << "\nEnter output file: ";
-    cin >> output;
+    // cout << "\nEnter output file: ";
+    // cin >> output;
     cout << "Parsing Dictionary.\n";
     clock_t t1 = clock();
     hashTable* table = parse_dictionary(dict_name);

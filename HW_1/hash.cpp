@@ -5,27 +5,27 @@
 
 hashTable::hashTable(int size) {
     int len = getPrime(size);
-    this->v.reserve(len);
+    this->v.resize(len);
     this->num_elements = 0;
 }
 // if pointer is provided, associate pointer with key
 // 0 if success, 1 if key already exists, 2 if rehash fails.
 int hashTable::insert(const std::string &key, void *pv) {
     // Load factor of 75%
-    int load_factor = (3 * (v.size() + v.capacity()) / 4);
+    int load_factor = (3 * (v.size()) / 4);
     if (num_elements > load_factor) {
         if (!rehash()) {
             return 2;
         }
     }
-    unsigned int index = hash(key) % (v.size() + v.capacity());
+    unsigned int index = hash(key) % (v.size());
 
     while (v[index] != nullptr && v[index]->isOccupied) {
         if (v[index]->key == key) {
             return 1;
         }
         index++;
-        index = index % (v.size() + v.capacity());
+        index = index % (v.size());
     }
     hashItem *element = new hashItem();
     element->key = key;
@@ -85,7 +85,7 @@ int hashTable::hash(const std::string &key) {
 // Searches for an item with a given key
 // Return position if found, otherwise -1
 int hashTable::findPos(const std::string &key) {
-    unsigned int index = hash(key) % (v.size() + v.capacity());
+    unsigned int index = hash(key) % (v.size());
     while (v[index] != nullptr && v[index]->isOccupied) {
         if (v[index]->key == key) {
             return index;
@@ -101,12 +101,13 @@ bool hashTable::rehash() {
     // Resize based on current vector size
     std::vector<hashItem *> tmp = v;
     try {
-        int new_size = getPrime(this->v.capacity());
+        int new_size = getPrime(this->v.size());
+        v.clear();
         v.resize(new_size);
+        num_elements = 0;
     } catch (...) {
         return false;
     }
-
     for (hashItem *item : tmp) {
         if (item != nullptr && !(item->isDeleted)) {
             this->insert(item->key, item->pv);
