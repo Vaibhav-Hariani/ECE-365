@@ -69,6 +69,7 @@ int hashTable::setPointer(const std::string &key, void *pv) {
     }
     hashItem* element = v[index];
     element->pv = pv;
+    return 0;
 }
 
 // True if deletion is successful, False if key is not there
