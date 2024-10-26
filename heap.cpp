@@ -15,11 +15,12 @@ int heap::insert(const std::string &id, int key, void *pv) {
     new_node.key = key;
     new_node.id = id;
     new_node.pData = pv;
-    data[num_elements] = new_node;
-    // This will also fail if rehashaing fails
     if (mapping.insert(id, &data[num_elements]) != 0) {
         return 2;
     }
+    data[num_elements] = new_node;
+    // This will also fail if rehashaing fails
+
     // Element has been added to end of array: Now it needs to slide into its
     // actual place
     percolateUp(num_elements);
@@ -27,8 +28,7 @@ int heap::insert(const std::string &id, int key, void *pv) {
     return 0;
 }
 
-int heap::deleteMin(std::string *pId, int *pKey,
-                    void *ppData) {
+int heap::deleteMin(std::string *pId, int *pKey, void *ppData) {
     if (num_elements == 0) {
         return 1;
     }
@@ -43,8 +43,7 @@ int heap::deleteMin(std::string *pId, int *pKey,
     return 0;
 }
 
-int heap::remove(const std::string &id, int *pKey,
-                 void *ppData) {
+int heap::remove(const std::string &id, int *pKey, void *ppData) {
     bool t;
     void *raw_pointer = mapping.getPointer(id, &t);
     if (t == false) {
@@ -62,8 +61,7 @@ int heap::remove(const std::string &id, int *pKey,
     return 0;
 }
 // Quick helper to get all the data out of a node, through the pointers
-void heap::extract_data(node &n, std::string *pId,
-                        int *pKey, void *ppData) {
+void heap::extract_data(node &n, std::string *pId, int *pKey, void *ppData) {
     if (pId != nullptr) {
         *pId = n.id;
     }
@@ -88,9 +86,9 @@ int heap::setKey(const std::string &id, int key) {
     // If the new key is smaller, we want the element at the top of the heap
     // Otherwise, put it at the bottom
     if (old_key < key) {
-        percolateUp(index);
-    } else {
         percolateDown(index);
+    } else {
+        percolateUp(index);
     }
     return 0;
 }
@@ -111,8 +109,8 @@ void heap::percolateUp(int posCur) {
         tmp = data[parent];
         data[parent] = data[posCur];
         data[posCur] = tmp;
-        mapping.setPointer(data[parent].id,&data[parent]);
-        mapping.setPointer(data[posCur].id,&data[posCur]);
+        mapping.setPointer(data[parent].id, &data[parent]);
+        mapping.setPointer(data[posCur].id, &data[posCur]);
         posCur = parent;
         parent = (posCur - 1) / 2;
     }
@@ -124,41 +122,26 @@ void heap::percolateDown(int posCur) {
     node tmp;
 
     // Because of how heap is built, doesn't matter which side swap occurs.
-    // Iterate until either bottom is hit or a key is smaller than the current
-    while (rchild < num_elements && data[posCur].key > data[lchild].key &&
-           data[posCur].key > data[rchild].key) {
-        tmp = data[rchild];
-        data[rchild] = data[posCur];
-        data[posCur] = tmp;
-        mapping.setPointer(data[rchild].id,&data[rchild]);
-        mapping.setPointer(data[posCur].id,&data[posCur]);
+    // Iterate until no elements below or a key is smaller than the current
+    while (lchild < num_elements && (data[posCur].key > data[lchild].key ||
+                                     data[posCur].key > data[rchild].key)) {
+        int swap_index = rchild;
+        // If it's greater than the left child
+        // Swap left if the left child is the smaller of the two
+        // Or there is no right child
+        if (data[posCur].key > data[lchild].key && rchild >= num_elements ||
+            data[lchild].key < data[rchild].key) {
+            swap_index = lchild;
+        }
 
-        // mapping.setPointer()
-        // Swap positions
-        posCur = rchild;
+        tmp = data[swap_index];
+        data[swap_index] = data[posCur];
+        data[posCur] = tmp;
+        mapping.setPointer(data[swap_index].id, &data[swap_index]);
+        mapping.setPointer(data[posCur].id, &data[posCur]);
+
+        posCur = swap_index;
         rchild = 2 * posCur + 2;
         lchild = 2 * posCur + 1;
-    }
-
-    // if lchild < num_elements and the 
-    // data is greater than data[lchild], we know it's less than rchild
-    if (lchild < num_elements && data[posCur].key > data[lchild].key) {
-        tmp = data[rchild];
-        data[rchild] = data[posCur];
-        data[posCur] = tmp;
-        mapping.setPointer(data[rchild].id,&data[rchild]);
-        mapping.setPointer(data[posCur].id,&data[posCur]);
-        // Swap positions
-
-    //Opposite logic over here
-    } else if (rchild < num_elements && data[posCur].key > data[rchild].key) {
-        tmp = data[lchild];
-        data[lchild] = data[posCur];
-        data[posCur] = tmp;
-        mapping.setPointer(data[lchild].id,&data[lchild]);
-        mapping.setPointer(data[posCur].id,&data[posCur]);
-
-        // mapping.setPointer()
-        // Swap positions
     }
 }

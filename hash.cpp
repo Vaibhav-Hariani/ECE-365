@@ -49,7 +49,7 @@ bool hashTable::contains(const std::string &key) {
 // if pointer to bool is provided, set bool to true if pointer is provided
 // set bool to false otherwise
 void *hashTable::getPointer(const std::string &key, bool *b) {
-    unsigned int index = this->findPos(key);
+    int index = this->findPos(key);
     if (index < 0) {
         if (b != nullptr) {
             *b = false;
@@ -64,10 +64,10 @@ void *hashTable::getPointer(const std::string &key, bool *b) {
 
 int hashTable::setPointer(const std::string &key, void *pv) {
     int index = this->findPos(key);
-    if(index < 0){
+    if (index < 0) {
         return 1;
     }
-    hashItem* element = v[index];
+    hashItem *element = v[index];
     element->pv = pv;
     return 0;
 }
@@ -99,6 +99,10 @@ int hashTable::findPos(const std::string &key) {
     unsigned int index = hash(key) % (v.size());
     while (v[index] != nullptr && v[index]->isOccupied) {
         if (v[index]->key == key) {
+            // Return -1 if the element has been deleted already.
+            if (v[index]->isDeleted) {
+                return -1;
+            }
             return index;
         }
         index++;

@@ -14,7 +14,7 @@ debug:
 	g++ -g -o useHeapDebug.out useHeap.cpp heap.cpp hash.cpp
 
 clean:
-	rm -f *.exe *.o *.stackdump *~
+	rm -f *.exe *.o *.stackdump *~ *.out
 
 backup:
 	test -d backups || mkdir backups
