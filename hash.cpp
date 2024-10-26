@@ -30,6 +30,7 @@ int hashTable::insert(const std::string &key, void *pv) {
     hashItem *element = new hashItem();
     element->key = key;
     element->isOccupied = true;
+    element->pv = pv;
     v[index] = element;
     num_elements++;
     return 0;
@@ -119,9 +120,11 @@ bool hashTable::rehash() {
 // Return a prime number with lower bound size
 // Can use a precomputed list of selected prime numbers.
 unsigned int hashTable::getPrime(int size) {
-    const int good_primes[19] = {1543, 6151, 24593, 49157, 98317,
-                                 196613, 393241, 786433,
-                                 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 100663319, 201326611, 402653189, 805306457, 1610612741};
+    const int good_primes[19] = {1543,      6151,      24593,     49157,
+                                 98317,     196613,    393241,    786433,
+                                 1572869,   3145739,   6291469,   12582917,
+                                 25165843,  50331653,  100663319, 201326611,
+                                 402653189, 805306457, 1610612741};
     int c = 0;
     while (good_primes[c] <= size) {
         c++;
