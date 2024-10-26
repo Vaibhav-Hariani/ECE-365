@@ -16,6 +16,8 @@ class hashTable {
     // false otherwise
     bool contains(const std::string &key);
 
+    int setPointer(const std::string &key, void *pv);
+
     // return nullptr if no key
     // if pointer to bool is provided, set bool to true if pointer is provided
     // set bool to false otherwise

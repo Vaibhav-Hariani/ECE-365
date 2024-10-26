@@ -62,6 +62,15 @@ void *hashTable::getPointer(const std::string &key, bool *b) {
     return (v[index]->pv);
 }
 
+int hashTable::setPointer(const std::string &key, void *pv) {
+    int index = this->findPos(key);
+    if(index < 0){
+        return 1;
+    }
+    hashItem* element = v[index];
+    element->pv = pv;
+}
+
 // True if deletion is successful, False if key is not there
 bool hashTable::remove(const std::string &key) {
     unsigned int index = this->findPos(key);

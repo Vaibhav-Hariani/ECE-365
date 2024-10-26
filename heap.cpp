@@ -104,42 +104,61 @@ int heap::getPos(node *pn) { return pn - &data[0]; }
 // If the pointer value isn't updated, getPos won't work
 void heap::percolateUp(int posCur) {
     int parent = (posCur - 1) / 2;
+    node tmp;
     // Every swap is an update to the table
     // If we hit zero, the data has percolated to the top
     while (posCur > 0 && data[posCur].key < data[parent].key) {
-        node tmp = data[parent];
+        tmp = data[parent];
         data[parent] = data[posCur];
         data[posCur] = tmp;
-        // Set pointer from parent key to new parent location
-        // Set pointer from child key to new child location
-        //  mapping.setPointer()
+        mapping.setPointer(data[parent].id,&data[parent]);
+        mapping.setPointer(data[posCur].id,&data[posCur]);
+        posCur = parent;
+        parent = (posCur - 1) / 2;
     }
 }
 
 void heap::percolateDown(int posCur) {
     int rchild = 2 * posCur + 2;
     int lchild = 2 * posCur + 1;
-    // Because of how heap is built, doesn't matter where swap occurs.
+    node tmp;
 
-    // Iterate until either bottom is hit or
+    // Because of how heap is built, doesn't matter which side swap occurs.
+    // Iterate until either bottom is hit or a key is smaller than the current
     while (rchild < num_elements && data[posCur].key > data[lchild].key &&
            data[posCur].key > data[rchild].key) {
-    }
-    // Fill left element first
-    if (lchild > num_elements) {
-    } else {
-    }
-    // Every swap is an update to the table
-    while (&&data[lchild].id < data[posCur].id &&
-           data[rchild].id < data[posCur].id) {
+        tmp = data[rchild];
+        data[rchild] = data[posCur];
+        data[posCur] = tmp;
+        mapping.setPointer(data[rchild].id,&data[rchild]);
+        mapping.setPointer(data[posCur].id,&data[posCur]);
+
+        // mapping.setPointer()
+        // Swap positions
+        posCur = rchild;
+        rchild = 2 * posCur + 2;
+        lchild = 2 * posCur + 1;
     }
 
-    while (posCur > 0 && data[posCur].id < data[parent].id) {
-        node tmp = data[parent];
-        data[parent] = data[posCur];
+    // if lchild < num_elements and the 
+    // data is greater than data[lchild], we know it's less than rchild
+    if (lchild < num_elements && data[posCur].key > data[lchild].key) {
+        tmp = data[rchild];
+        data[rchild] = data[posCur];
         data[posCur] = tmp;
-        // Set pointer from parent key to new parent location
-        // Set pointer from child key to new child location
-        //  mapping.setPointer()
+        mapping.setPointer(data[rchild].id,&data[rchild]);
+        mapping.setPointer(data[posCur].id,&data[posCur]);
+        // Swap positions
+
+    //Opposite logic over here
+    } else if (rchild < num_elements && data[posCur].key > data[rchild].key) {
+        tmp = data[lchild];
+        data[lchild] = data[posCur];
+        data[posCur] = tmp;
+        mapping.setPointer(data[lchild].id,&data[lchild]);
+        mapping.setPointer(data[posCur].id,&data[posCur]);
+
+        // mapping.setPointer()
+        // Swap positions
     }
 }
