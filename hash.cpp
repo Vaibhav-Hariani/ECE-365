@@ -78,7 +78,7 @@ int hashTable::setPointer(const std::string &key, void *pv) {
 
 // True if deletion is successful, False if key is not there
 bool hashTable::remove(const std::string &key) {
-    unsigned int index = this->findPos(key);
+    int index = this->findPos(key);
     if (index < 0) {
         return false;
     }
@@ -135,7 +135,7 @@ bool hashTable::rehash() {
 // Return a prime number with lower bound size
 // Can use a precomputed list of selected prime numbers.
 unsigned int hashTable::getPrime(int size) {
-    const int good_primes[19] = {1543,      6151,      24593,     49157,
+    const unsigned int good_primes[19] = {1543,      6151,      24593,     49157,
                                  98317,     196613,    393241,    786433,
                                  1572869,   3145739,   6291469,   12582917,
                                  25165843,  50331653,  100663319, 201326611,
