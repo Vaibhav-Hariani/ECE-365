@@ -20,7 +20,11 @@ int hashTable::insert(const std::string &key, void *pv) {
     }
     unsigned int index = hash(key) % (v.size());
 
-    while (v[index] != nullptr && v[index]->isOccupied) {
+    while (v[index] != nullptr && v[index]->isOccupied && !(v[index]-> isDeleted)) {
+        //This was likely the bug: I wasn't checking to see if the element was deleted
+        //If it is, we can safely fill that square
+        //As a result, when you keep filling up the hash table and keep removing all the elements, it will crash.
+        //Hopefully this fixes things
         if (v[index]->key == key) {
             return 1;
         }
@@ -98,11 +102,8 @@ int hashTable::hash(const std::string &key) {
 int hashTable::findPos(const std::string &key) {
     unsigned int index = hash(key) % (v.size());
     while (v[index] != nullptr && v[index]->isOccupied) {
-        if (v[index]->key == key) {
-            // Return -1 if the element has been deleted already.
-            if (v[index]->isDeleted) {
-                return -1;
-            }
+        if (!(v[index] ->isDeleted) && v[index]->key == key) {
+            //If the key is the same and the element hasn't been deleted
             return index;
         }
         index++;
