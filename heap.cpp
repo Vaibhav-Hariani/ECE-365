@@ -44,6 +44,9 @@ int heap::deleteMin(std::string *pId, int *pKey, void *ppData) {
 }
 
 int heap::remove(const std::string &id, int *pKey, void *ppData) {
+    if(num_elements == 0){
+        return 1;
+    }
     bool t;
     void *raw_pointer = mapping.getPointer(id, &t);
     if (t == false) {

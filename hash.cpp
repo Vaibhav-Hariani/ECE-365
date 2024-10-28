@@ -4,7 +4,7 @@
 #include <vector>
 
 hashTable::hashTable(int size) {
-    int len = getPrime(size);
+    unsigned int len = getPrime(size);
     this->v.resize(len);
     this->num_elements = 0;
 }
@@ -18,7 +18,7 @@ int hashTable::insert(const std::string &key, void *pv) {
             return 2;
         }
     }
-    unsigned int index = hash(key) % (v.size());
+     int index = hash(key) % (v.size());
 
     while (v[index] != nullptr && v[index]->isOccupied && !(v[index]-> isDeleted)) {
         //This was likely the bug: I wasn't checking to see if the element was deleted
@@ -100,7 +100,7 @@ int hashTable::hash(const std::string &key) {
 // Searches for an item with a given key
 // Return position if found, otherwise -1
 int hashTable::findPos(const std::string &key) {
-    unsigned int index = hash(key) % (v.size());
+    int index = hash(key) % (v.size());
     while (v[index] != nullptr && v[index]->isOccupied) {
         if (!(v[index] ->isDeleted) && v[index]->key == key) {
             //If the key is the same and the element hasn't been deleted
