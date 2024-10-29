@@ -1,6 +1,6 @@
 #include "heap.h"
 
-heap::heap(int capacity) : mapping(4 * capacity / 3) {
+heap::heap(int capacity) : mapping((5 * capacity)/2) {
     data.resize(capacity + 1);
     this->capacity = capacity;
     num_elements = 0;
@@ -19,7 +19,7 @@ int heap::insert(const std::string &id, int key, void *pv) {
         return 2;
     }
     data[num_elements] = new_node;
-    // This will also fail if rehashaing fails
+    // This will also fail if rehashing fails
 
     // Element has been added to end of array: Now it needs to slide into its
     // actual place

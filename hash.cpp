@@ -107,7 +107,7 @@ int hashTable::findPos(const std::string &key) {
             return index;
         }
         index++;
-        index = index % v.capacity();
+        index = index % v.size();
     }
     return -1;
 }
