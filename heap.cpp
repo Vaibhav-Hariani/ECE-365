@@ -56,11 +56,20 @@ int heap::remove(const std::string &id, int *pKey, void *ppData) {
     int index = getPos(element_pointer);
     extract_data(data[index], nullptr, pKey, ppData);
 
+    int prev_key = data[index].key;
+
     num_elements--;
+    
     data[index] = data[num_elements];
+    
     mapping.remove(id);
     // Slide the previously last node down the heap into a final position
-    percolateDown(index);
+    //Todo: make sure this sign is set properly
+    if(prev_key > data[index].key) {
+        percolateDown(index);        
+    } else {
+        percolateUp(index);
+    }
     return 0;
 }
 // Quick helper to get all the data out of a node, through the pointers
