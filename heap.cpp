@@ -67,8 +67,11 @@ int heap::remove(const std::string &id, int *pKey, void *ppData) {
     //Todo: make sure this sign is set properly
     if(prev_key > data[index].key) {
         percolateDown(index);        
-    } else {
+    } else if (prev_key < data[index].key){
         percolateUp(index);
+    } 
+    else {
+        mapping.setPointer(data[index], &data[index]);
     }
     return 0;
 }
