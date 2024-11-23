@@ -87,4 +87,4 @@ class heap {
     int getPos(node *pn);
 };
 
-#endif  // HASH_H_
+#endif  // HEAP_H_
