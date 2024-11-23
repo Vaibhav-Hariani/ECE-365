@@ -64,15 +64,13 @@ int heap::remove(const std::string &id, int *pKey, void *ppData) {
     
     mapping.remove(id);
     // Slide the previously last node down the heap into a final position
-    //Todo: make sure this sign is set properly
+    mapping.setPointer(data[index].id, &data[index]);
+
     if(prev_key > data[index].key) {
         percolateDown(index);        
     } else if (prev_key < data[index].key){
         percolateUp(index);
     } 
-    else {
-        mapping.setPointer(data[index], &data[index]);
-    }
     return 0;
 }
 // Quick helper to get all the data out of a node, through the pointers
@@ -155,7 +153,7 @@ void heap::percolateDown(int posCur) {
         mapping.setPointer(data[swap_index].id, &data[swap_index]);
         mapping.setPointer(data[posCur].id, &data[posCur]);
 
-        posCur = swap_index;
+        posCur = swap_index; 
         rchild = 2 * posCur + 2;
         lchild = 2 * posCur + 1;
     }
