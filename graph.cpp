@@ -71,47 +71,45 @@ std::vector<std::string> graph::djikstra(std::string starting_node) {
     Pqueue.insert(initial_node->name, 0, raw_node);
     int weight;
 
-    paths[initial_node->position] = "[ " + initial_node->name;
+    paths[initial_node->position] = "[" + initial_node->name;
     weights[initial_node->position] = 0;
 
-    while (Pqueue.deleteMin(nullptr, &weight, raw_node) < 1) {
+    while (Pqueue.deleteMin(nullptr, &weight, &raw_node) < 1) {
         vertex *current = (vertex *)raw_node;
         weights[current->position] = weight;
         for (edge *cur_edge : current->paths) {
             vertex *next_vertex = cur_edge->final;
-            // 2 if element exists
-            if (Pqueue.insert(next_vertex->name, weight + cur_edge->weight,
-                              next_vertex) == 2) {
-                int existing_weight;
-                Pqueue.get_node(next_vertex->name, &existing_weight);
-                if (existing_weight > weight + cur_edge->weight) {
-                    Pqueue.setKey(next_vertex->name, weight + cur_edge->weight);
-                    paths[next_vertex->position] =
-                        paths[current->position] + "," + next_vertex->name;
-
-                    weights[next_vertex->position] = weight + cur_edge->weight;
-                }
-
-            } else {
+            // If this node has not seen before or we are updating its weight
+            if (paths[next_vertex->position].empty() ||
+                (weights[next_vertex->position] > weight + cur_edge->weight)) {
+                // Pqueue.insert(next_vertex->name, weight + cur_edge->weight,
+                //               next_vertex);
                 paths[next_vertex->position] =
                     paths[current->position] + ", " + next_vertex->name;
                 weights[next_vertex->position] = weight + cur_edge->weight;
+
+                //Insert into pqueue or update key if it is already there
+                if (Pqueue.insert(next_vertex->name, weight + cur_edge->weight,
+                                  next_vertex) == 2) {
+                    Pqueue.setKey(next_vertex->name, weight + cur_edge->weight);
+                }
+                // Otherwise, do nothing
             }
         }
     }
-
     // Generating the final vector for display
-    std::vector<std::string> final_vec;
-    final_vec.resize(num_elements);
-    for (vertex *vertex : adj_list) {
-        final_vec[vertex->position] = vertex->name + ":";
-        if (paths[vertex->position].empty()) {
-            final_vec[vertex->position] += " NO PATH";
-        } else {
-            final_vec[vertex->position] +=
-                " " + std::to_string(weights[vertex->position]) + " " +
-                paths[vertex->position] + "]";
+        std::vector<std::string> final_vec;
+        final_vec.resize(num_elements);
+        for (vertex *vertex : adj_list) {
+            final_vec[vertex->position] = vertex->name + ":";
+            if (paths[vertex->position].empty()) {
+                final_vec[vertex->position] += " NO PATH";
+            } else {
+                final_vec[vertex->position] +=
+                    " " + std::to_string(weights[vertex->position]) + " " +
+                    paths[vertex->position] + "]";
+            }
         }
-    }
+
     return final_vec;
-}
+    }

@@ -51,7 +51,7 @@ class heap {
     //   1 if the heap is empty
     //
     int deleteMin(std::string *pId = nullptr, int *pKey = nullptr,
-                  void *ppData = nullptr);
+                  void ** ppData = nullptr);
 
     //
     // remove - delete the node with the specified id from the binary heap
@@ -65,13 +65,13 @@ class heap {
     //   1 if a node with the given id does not exist
     //
     int remove(const std::string &id, int *pKey = nullptr,
-               void *ppData = nullptr);
+               void **ppData = nullptr);
 
     // New function to get node data given a key.
     //  0 on success
     //  1 if node does not exist
     int get_node(const std::string &id, int *pKey = nullptr,
-                 void *ppData = nullptr);
+                 void **ppData = nullptr);
 
    private:
     int capacity;
@@ -86,7 +86,7 @@ class heap {
     hashTable mapping;
 
     void extract_data(node &n, std::string *pId = nullptr, int *pKey = nullptr,
-                      void *ppData = nullptr);
+                      void **ppData = nullptr);
 
     void percolateUp(int posCur);
     void percolateDown(int posCur);

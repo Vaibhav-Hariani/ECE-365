@@ -46,7 +46,7 @@ int main() {
     getline(cin, out_filename);
     outfile.open(out_filename);
     for(string line: lines){
-        outfile << line << "\n";
+        outfile << line << '\n';
     }
     outfile.close();
 

@@ -28,7 +28,7 @@ int heap::insert(const std::string &id, int key, void *pv) {
     return 0;
 }
 
-int heap::deleteMin(std::string *pId, int *pKey, void *ppData) {
+int heap::deleteMin(std::string *pId, int *pKey, void ** ppData) {
     if (num_elements == 0) {
         return 1;
     }
@@ -43,7 +43,7 @@ int heap::deleteMin(std::string *pId, int *pKey, void *ppData) {
     return 0;
 }
 
-int heap::get_node(const std::string &id, int *pKey, void *ppData) {
+int heap::get_node(const std::string &id, int *pKey, void **ppData) {
     bool t;
     void *raw_pointer = mapping.getPointer(id, &t);
     if (t == false) {
@@ -55,7 +55,7 @@ int heap::get_node(const std::string &id, int *pKey, void *ppData) {
     return 0;
 }
 
-int heap::remove(const std::string &id, int *pKey, void *ppData) {
+int heap::remove(const std::string &id, int *pKey, void **ppData) {
     if (num_elements == 0) {
         return 1;
     }
@@ -67,7 +67,6 @@ int heap::remove(const std::string &id, int *pKey, void *ppData) {
     node *element_pointer = static_cast<node *>(raw_pointer);
     int index = getPos(element_pointer);
     extract_data(data[index], nullptr, pKey, ppData);
-
     int prev_key = data[index].key;
 
     num_elements--;
@@ -86,7 +85,7 @@ int heap::remove(const std::string &id, int *pKey, void *ppData) {
     return 0;
 }
 // Quick helper to get all the data out of a node, through the pointers
-void heap::extract_data(node &n, std::string *pId, int *pKey, void *ppData) {
+void heap::extract_data(node &n, std::string *pId, int *pKey, void **ppData) {
     if (pId != nullptr) {
         *pId = n.id;
     }
@@ -94,7 +93,7 @@ void heap::extract_data(node &n, std::string *pId, int *pKey, void *ppData) {
         *pKey = n.key;
     }
     if (ppData != nullptr) {
-        ppData = n.pData;
+        *ppData = n.pData;
     }
 }
 
