@@ -94,9 +94,10 @@ std::vector<std::string> graph::djikstra(std::string starting_node) {
         } else {
           paths[next_vertex->position] =
               paths[current->position] + "," + next_vertex->name;
-              
+
           weights[next_vertex->position] = weight + cur_edge->weight;
         }
+        
       }
     }
   }
