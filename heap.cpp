@@ -43,6 +43,18 @@ int heap::deleteMin(std::string *pId, int *pKey, void *ppData) {
     return 0;
 }
 
+int heap::get_node(const std::string &id, int *pKey = nullptr, void *ppData = nullptr){
+    bool t;
+    void *raw_pointer = mapping.getPointer(id, &t);
+    if (t == false) {
+        return 1;
+    }
+    node *element_pointer = static_cast<node *>(raw_pointer);
+    int index = getPos(element_pointer);
+    extract_data(data[index], nullptr, pKey, ppData);
+    return 0;
+}
+
 int heap::remove(const std::string &id, int *pKey, void *ppData) {
     if(num_elements == 0){
         return 1;

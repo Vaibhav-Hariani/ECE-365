@@ -66,6 +66,12 @@ class heap {
     //
     int remove(const std::string &id, int *pKey = nullptr,
                void *ppData = nullptr);
+    
+
+    //New function to get node data given a key.
+    // 0 on success
+    // 1 if node does not exist
+    int get_node(const std::string &id, int *pKey = nullptr, void *ppData = nullptr);
 
    private:
     int capacity;

@@ -52,6 +52,8 @@ std::vector<std::string> graph::djikstra(std::string starting_node){
     //Quick lookups for each element: This allows for the final ordering to be proper
     std::vector<std::string> ret;
 
+    ret.resize(num_elements);
+
     heap Pqueue = heap(num_elements);
     // hashTable return_table = hashTable(num_elements * 2);
     bool exists = true;
@@ -61,9 +63,21 @@ std::vector<std::string> graph::djikstra(std::string starting_node){
     }
     vertex* initial_node = (vertex*) raw_node;    
     Pqueue.insert(initial_node->name, 0, raw_node);
-    
-    while(Pqueue.deleteMin(nullptr, nullptr, raw_node) < 1) {
-        vertex* current = 
-    }
 
+    int weight; 
+    while(Pqueue.deleteMin(nullptr, &weight, raw_node) < 1) {
+        vertex* current = (vertex *) raw_node;
+        ret[current->position] = current -> name + "\t"  + std::to_string(weight); 
+        for(edge* cur_edge: current->paths){
+            vertex* next_vertex = cur_edge->final;
+            //2 if element exists
+            if(Pqueue.insert(next_vertex->name, weight + cur_edge ->weight, next_vertex) == 2){
+                int existing_weight;
+                Pqueue.get_node(next_vertex->name,&existing_weight);
+                if(existing_weight > weight + cur_edge ->weight) {
+                    Pqueue.setKey(next_vertex->name, weight + cur_edge->weight);
+                }
+            }
+        }
+    }
 }
