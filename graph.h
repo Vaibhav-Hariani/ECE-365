@@ -45,6 +45,8 @@ class graph {
         std::string name;
         // Points to other nodes
         std::list<edge*> paths;
+        //Allows the nodes to be placed in the final string effectively
+        int position;
     };
 
 };

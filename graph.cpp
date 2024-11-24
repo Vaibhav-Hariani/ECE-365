@@ -38,17 +38,32 @@ int graph::insert(std::string initial, std::string final, int weight) {
 graph::vertex* graph::insert_new(std::string name, int& status) {
     vertex* final_vertex = new vertex();
     status = vertex_lookup.insert(name, final_vertex);
+    
     if (status > 0) {
         return nullptr;
     }
     final_vertex->name = name;
+    final_vertex->position = num_elements;
     adj_list.push_back(final_vertex);
     num_elements++;
 }
 
 std::vector<std::string> graph::djikstra(std::string starting_node){
+    //Quick lookups for each element: This allows for the final ordering to be proper
     std::vector<std::string> ret;
+
     heap Pqueue = heap(num_elements);
+    // hashTable return_table = hashTable(num_elements * 2);
+    bool exists = true;
+    void * raw_node = vertex_lookup.getPointer(starting_node, &exists);
+    if (!exists) {
+        return ret;
+    }
+    vertex* initial_node = (vertex*) raw_node;    
+    Pqueue.insert(initial_node->name, 0, raw_node);
     
+    while(Pqueue.deleteMin(nullptr, nullptr, raw_node) < 1) {
+        vertex* current = 
+    }
 
 }
