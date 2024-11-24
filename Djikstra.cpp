@@ -37,8 +37,9 @@ int main() {
     auto start = chrono::high_resolution_clock::now();
     vector<string> lines = Djikstra.djikstra(v1);
     auto stop = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::seconds>(stop - start);
-    cout << "Total time (in seconds) to apply Djikstra's algorithm:" << duration.count() << "\n";
+    auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+    double seconds = duration.count() / 1e6;
+    cout << "Total time (in seconds) to apply Djikstra's algorithm: " << seconds << "\n";
 
     string out_filename;
     cout << "Enter name of output file: ";
