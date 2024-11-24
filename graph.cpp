@@ -48,6 +48,7 @@ graph::vertex *graph::insert_new(std::string name, int &status) {
   final_vertex->position = num_elements;
   adj_list.push_back(final_vertex);
   num_elements++;
+  return final_vertex;
 }
 
 std::vector<std::string> graph::djikstra(std::string starting_node) {
@@ -83,22 +84,34 @@ std::vector<std::string> graph::djikstra(std::string starting_node) {
                         next_vertex) == 2) {
         int existing_weight;
         Pqueue.get_node(next_vertex->name, &existing_weight);
-
         if (existing_weight > weight + cur_edge->weight) {
           Pqueue.setKey(next_vertex->name, weight + cur_edge->weight);
           paths[next_vertex->position] =
               paths[current->position] + "," + next_vertex->name;
 
           weights[next_vertex->position] = weight + cur_edge->weight;
+        }
 
         } else {
           paths[next_vertex->position] =
-              paths[current->position] + "," + next_vertex->name;
-
+              paths[current->position] + ", " + next_vertex->name;
           weights[next_vertex->position] = weight + cur_edge->weight;
         }
-        
       }
     }
+
+  // Generating the final vector for display
+  std::vector<std::string> final_vec;
+  final_vec.resize(num_elements);
+  for (vertex *vertex : adj_list) {
+    final_vec[vertex->position] = vertex->name + ":";
+    if (paths[vertex->position].empty()) {
+      final_vec[vertex->position] += " NO PATH";
+    } else {
+      final_vec[vertex->position] += " " +
+                                     std::to_string(weights[vertex->position]) +
+                                     " " + paths[vertex->position] + "]";
+    }
   }
+  return final_vec;
 }

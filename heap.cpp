@@ -43,8 +43,8 @@ int heap::deleteMin(std::string *pId, int *pKey, void *ppData) {
   return 0;
 }
 
-int heap::get_node(const std::string &id, int *pKey = nullptr,
-                   void *ppData = nullptr) {
+int heap::get_node(const std::string &id, int *pKey,
+                   void *ppData) {
   bool t;
   void *raw_pointer = mapping.getPointer(id, &t);
   if (t == false) {
