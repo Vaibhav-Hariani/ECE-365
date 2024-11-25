@@ -1,15 +1,15 @@
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <chrono>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include <string>
+
 #include "graph.h"
 
 using namespace std;
 
 int main() {
-
     string filename;
 
     graph Djikstra = graph();
@@ -20,7 +20,7 @@ int main() {
     infile.open(filename);
     string line;
     stringstream line_buf;
-    while(getline(infile,line)){
+    while (getline(infile, line)) {
         vector<string> pieces;
         stringstream line_buf(line);
         string word;
@@ -34,21 +34,26 @@ int main() {
     string v1;
     cout << "Enter name of starting vertex: ";
     getline(cin, v1);
+    while (!Djikstra.exists(v1)) {
+        cout << "Invalid Vertex: Please specify an existing vertex: ";
+        getline(cin, v1);
+    }
+
     auto start = chrono::high_resolution_clock::now();
     vector<string> lines = Djikstra.djikstra(v1);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     double seconds = duration.count() / 1e6;
-    cout << "Total time (in seconds) to apply Djikstra's algorithm: " << seconds << "\n";
+    cout << "Total time (in seconds) to apply Djikstra's algorithm: " << seconds
+         << "\n";
 
     string out_filename;
     cout << "Enter name of output file: ";
     ofstream outfile;
     getline(cin, out_filename);
     outfile.open(out_filename);
-    for(string line: lines){
+    for (string line : lines) {
         outfile << line << '\n';
     }
     outfile.close();
-
 }

@@ -37,6 +37,8 @@ int graph::insert(std::string initial, std::string final, int weight) {
     return 0;
 }
 
+bool graph::exists(std::string key) { return vertex_lookup.contains(key); }
+
 graph::vertex *graph::insert_new(std::string name, int &status) {
     vertex *final_vertex = new vertex();
     status = vertex_lookup.insert(name, final_vertex);
@@ -88,7 +90,7 @@ std::vector<std::string> graph::djikstra(std::string starting_node) {
                     paths[current->position] + ", " + next_vertex->name;
                 weights[next_vertex->position] = weight + cur_edge->weight;
 
-                //Insert into pqueue or update key if it is already there
+                // Insert into pqueue or update key if it is already there
                 if (Pqueue.insert(next_vertex->name, weight + cur_edge->weight,
                                   next_vertex) == 2) {
                     Pqueue.setKey(next_vertex->name, weight + cur_edge->weight);
@@ -98,18 +100,18 @@ std::vector<std::string> graph::djikstra(std::string starting_node) {
         }
     }
     // Generating the final vector for display
-        std::vector<std::string> final_vec;
-        final_vec.resize(num_elements);
-        for (vertex *vertex : adj_list) {
-            final_vec[vertex->position] = vertex->name + ":";
-            if (paths[vertex->position].empty()) {
-                final_vec[vertex->position] += " NO PATH";
-            } else {
-                final_vec[vertex->position] +=
-                    " " + std::to_string(weights[vertex->position]) + " " +
-                    paths[vertex->position] + "]";
-            }
+    std::vector<std::string> final_vec;
+    final_vec.resize(num_elements);
+    for (vertex *vertex : adj_list) {
+        final_vec[vertex->position] = vertex->name + ":";
+        if (paths[vertex->position].empty()) {
+            final_vec[vertex->position] += " NO PATH";
+        } else {
+            final_vec[vertex->position] +=
+                " " + std::to_string(weights[vertex->position]) + " " +
+                paths[vertex->position] + "]";
         }
+    }
 
     return final_vec;
-    }
+}

@@ -18,6 +18,8 @@ class graph {
     int insert(std::string initial_node, std::string final_node,
                int path_weight);
 
+    bool exists(std::string key);
+
     // Returns a representation of djikstras algorithm
     std::vector<std::string> djikstra(std::string starting_node);
 
