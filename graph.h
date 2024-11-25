@@ -10,7 +10,7 @@
 class graph {
    public:
     // Nothing to be passed here
-    graph();
+    graph(int size = 500);
 
     // insert new node, path, weight
     // 0 if successful

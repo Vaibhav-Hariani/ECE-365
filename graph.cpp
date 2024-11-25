@@ -1,6 +1,6 @@
 #include "graph.h"
 
-graph::graph() : vertex_lookup(500) { num_elements = 0; }
+graph::graph(int size): vertex_lookup(size) { num_elements = 0; }
 
 int graph::insert(std::string initial, std::string final, int weight) {
     vertex *initial_vertex;
@@ -90,10 +90,14 @@ std::vector<std::string> graph::djikstra(std::string starting_node) {
                     paths[current->position] + ", " + next_vertex->name;
                 weights[next_vertex->position] = weight + cur_edge->weight;
 
+                int insert_status = Pqueue.insert(next_vertex->name, weight + cur_edge->weight,
+                                  next_vertex);
                 // Insert into pqueue or update key if it is already there
-                if (Pqueue.insert(next_vertex->name, weight + cur_edge->weight,
-                                  next_vertex) == 2) {
+                if (insert_status == 2) {
                     Pqueue.setKey(next_vertex->name, weight + cur_edge->weight);
+                } else if (insert_status == 1) {
+                    throw("REHASH FAILED");
+                    return paths;
                 }
                 // Otherwise, do nothing
             }

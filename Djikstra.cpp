@@ -4,19 +4,24 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
 #include "graph.h"
+#include <filesystem>
+
 
 using namespace std;
 
 int main() {
     string filename;
 
-    graph Djikstra = graph();
-
     cout << "Enter name of graph file: ";
     getline(cin, filename);
     fstream infile;
+    //This is an overestimate of the file size:
+    //A line with simple formatting (va vb x \n) occupies at least 8 bytes and allocates at most 2 new elements
+    //As such, the absolute maximum number of nodes is size / 7. 
+    // Since memory management wasn't specified, this is a simple exploit to minimize reallocation.
+    int size = filesystem::file_size(filename) / 14;
+    graph Djikstra = graph(size);
     infile.open(filename);
     string line;
     stringstream line_buf;
